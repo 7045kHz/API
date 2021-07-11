@@ -1,0 +1,31 @@
+{
+    "name":"MicroService API",
+    "description":"Documentation for MicroService API",
+    "version":1.1,
+    "endpoint":[
+        {
+            "name":"Status",
+            "path":"/","example":"http://hostname:PORT/status",
+            "fields":null
+        },
+        {
+            "name":"api",
+            "path":"/api",
+            "example":"http://hostname:PORT/api",
+            "fields":null
+        },
+        {
+            "name":"add",
+            "path":"/add",
+            "example":"http://hostname:PORT/add",
+            "fields":[
+                {
+                    "name":"INT1",
+                    "value":"int"
+                },
+                {
+                    "name":"INT2",
+                    "value":"int"
+                }]
+        }]
+}

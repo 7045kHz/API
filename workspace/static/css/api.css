@@ -1,0 +1,19 @@
+table, th, td {
+  border: 1px solid black;
+}
+td, th {
+  width: 20rem;
+  height: 2rem;
+  border: 1px solid black;
+  text-align: center;
+}
+th {
+  background: rgb(221, 47, 24);
+  border-color: black;
+  color: white;
+  border: 1px solid black;
+}
+body {
+  padding: 1rem;
+}
+h1 {color: rgb(221, 47, 24);}
