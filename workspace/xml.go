@@ -10,19 +10,6 @@ import (
 	"golang.org/x/net/html/charset"
 )
 
-type Envelope struct {
-	XMLName xml.Name
-	Body    Body
-}
-
-type Body struct {
-	GetResponse completeResponse `xml:"ws_addResponse"`
-}
-
-type completeResponse struct {
-	Response string `xml:"result"`
-}
-
 func main() {
 	// Print the XML comments from the test file, which should
 	// contain most of the printable ISO-8859-1 characters.
@@ -37,7 +24,7 @@ func main() {
 
 	xmlBytes, _ := ioutil.ReadAll(r)
 	fmt.Printf("data type %T\n\n", xmlBytes)
-	var soap Envelope
+	var soap GetEnvelope
 
 	reader := bytes.NewReader(xmlBytes)
 	decoder := xml.NewDecoder(reader)
