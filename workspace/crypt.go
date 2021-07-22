@@ -17,11 +17,27 @@ import (
 CREDIT: https://www.thepolyglotdeveloper.com/2018/02/encrypt-decrypt-data-golang-application-crypto-packages/
 */
 type Authorization struct {
-	Administrator User `json:"Administrator"`
+	Administrator User   `json:"Administrator"`
+	Url           string `json:"URL`
 }
 type User struct {
 	Account  string `json:"Account"`
 	Password string `json:"Password"`
+}
+
+// Returns usr, pwd, and url of connection
+func (s Authorization) GetUser() (usr string) {
+	usr = fmt.Sprintf("%s", s.Administrator.Account)
+	return usr
+}
+
+func (s Authorization) GetPwd() (pwd string) {
+	pwd = fmt.Sprintf("%s", s.Administrator.Password)
+	return pwd
+}
+func (s Authorization) GetUrl() (url string) {
+	url = fmt.Sprintf("%s", s.Url)
+	return url
 }
 
 func createHash(key string) string {
@@ -83,7 +99,8 @@ func Help(e, s string) {
 		"Administrator": {
 				"Account":"admin",
 				"Password":"abc123"
-		}
+		},
+		"URL": "http://www.somewhere.com/api" 
 }`)
 	os.Exit(5)
 
@@ -91,10 +108,10 @@ func Help(e, s string) {
 
 // checkJSecureFiles function checks for secure file, and creates it from json file if it doesn't exist.
 // both secure file and json are missing, exit.
-func checkJSecureFiles(e, s string) {
+func checkJSecureFiles(e, s, passphrase string) {
 	if _, err := os.Stat(s); err == nil {
 		data, err := ioutil.ReadFile(s)
-		encryptFile(e, data, "111222333")
+		encryptFile(e, data, passphrase)
 		if err != nil {
 			fmt.Print(err)
 		}
@@ -111,8 +128,8 @@ func checkJSecureFiles(e, s string) {
 }
 
 // loadJSecureAccounts function loads account information from secure file
-func loadJSecureAccounts(s string) Authorization {
-	decrypted := decryptFile(s, "111222333")
+func loadJSecureAccounts(s string, passphrase string) Authorization {
+	decrypted := decryptFile(s, passphrase)
 	var p Authorization
 
 	err := json.Unmarshal([]byte(decrypted), &p)
@@ -125,10 +142,11 @@ func loadJSecureAccounts(s string) Authorization {
 
 func main() {
 
+	sec := "123abc09876A2Czz56732"
 	// Checking for arguments, and login information
-	encfile := ".\\account.enc"
-	startup_json_file := ".\\account.json"
-	checkJSecureFiles(encfile, startup_json_file)
+	encfile := ".\\Authorization.enc"
+	startup_json_file := ".\\Authorization.json"
+	checkJSecureFiles(encfile, startup_json_file, sec)
 
 	// if user passes anything to this program spout out help
 	programName := os.Args[0]
@@ -140,9 +158,14 @@ func main() {
 	}
 
 	// Check and load secure accounts
-	p := loadJSecureAccounts(encfile)
+	p := loadJSecureAccounts(encfile, sec)
 
-	fmt.Printf("%s = %s\n", p.Administrator.Account, p.Administrator.Password)
+	usr := p.GetUser()
+	fmt.Println(usr)
+	pw := p.GetPwd()
+	fmt.Println(pw)
+	url := p.GetUrl()
+	fmt.Println(url)
 
 	//ciphertext := encrypt([]byte("Hello World"), "112233")
 	//fmt.Printf("Encrypted: %x\n", ciphertext)
